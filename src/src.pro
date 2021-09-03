@@ -6,6 +6,7 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
+        effect_plasma.cpp \
         main.cpp
 
 CONFIG += link_pkgconfig
@@ -23,3 +24,6 @@ win32 {
 }
 
 INSTALLS += target
+
+HEADERS += \
+	effect_plasma.h

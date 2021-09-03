@@ -1,19 +1,19 @@
 #include <iostream>
 #include <SDL2/SDL.h>
 
-using namespace std;
+#include "./effect_plasma.h"
 
-void DrawFrame(uint32_t *pixelbuffer, int xw, int yw, int pitch, float frametime);
+using namespace std;
 
 #undef main
 
 int main()
 {
-	int window_xw = 1920;
+	int window_xw = 1920;	// Output Window Size or Fullscreen Size
 	int window_yw = 1080;
 
-	int output_xw = 320;	// Full HD Demo
-	int output_yw = 240;
+	int output_xw = 640;	// Render Size for the Demo -> Scaled toWindow Size
+	int output_yw = 480;
 
 	uint32_t pixelformat = SDL_PIXELFORMAT_RGBA8888;
 
@@ -25,9 +25,11 @@ int main()
 	uint64_t counter_max = pf_frequency / fps;
 	uint64_t counter1 = 0;
 
+	EffectPlasma *plasma = new EffectPlasma(output_xw, output_yw);
+
 	SDL_Init(SDL_INIT_VIDEO);
 
-	SDL_Window *window = SDL_CreateWindow("OldSchoolIntro",SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, window_xw, window_yw, SDL_WINDOW_OPENGL | /*SDL_WINDOW_FULLSCREEN_DESKTOP |*/ SDL_WINDOW_RESIZABLE);
+	SDL_Window *window = SDL_CreateWindow("Oldschool Demo Effects",SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, window_xw, window_yw, SDL_WINDOW_OPENGL | /*SDL_WINDOW_FULLSCREEN_DESKTOP |*/ SDL_WINDOW_RESIZABLE);
 	if(window == nullptr)
 	{
 		cout << "Error: SDL Window is not open." << endl;
@@ -71,7 +73,9 @@ int main()
 
 		SDL_LockTexture(texture_01, 0, (void**)&pixelbuffer, &pitch);
 		pitch /= SDL_BYTESPERPIXEL(pixelformat);
-		DrawFrame(pixelbuffer, output_xw, output_yw, pitch, frame_time);
+
+		plasma->RenderEffect(pixelbuffer, pitch, frame_time);
+
 		SDL_UnlockTexture(texture_01);
 
 		SDL_RenderCopy(renderer_out, texture_01, 0, 0);
@@ -83,17 +87,13 @@ int main()
 		counter1 = counter1 - counter_max;
 
 		SDL_RenderPresent(renderer_out);
+
+		SDL_Delay(20);
 	}
+
+	delete plasma;
 
 	SDL_DestroyTexture(texture_01);
 	SDL_Quit();
 	return 0;
-}
-
-void DrawFrame(uint32_t *pixelbuffer, int xw, int yw, int pitch, float frametime)
-{
-	pixelbuffer[0] = 0xffffffff;
-	pixelbuffer[xw - 1] = 0xffffffff;
-	pixelbuffer[(yw -1) * pitch] = 0xffffffff;
-	pixelbuffer[(yw -1) * pitch + xw - 1] = 0xffffffff;
 }
