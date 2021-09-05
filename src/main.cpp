@@ -88,7 +88,7 @@ int main()
 
 		SDL_RenderPresent(renderer_out);
 
-		SDL_Delay(20);
+		SDL_Delay(15);
 	}
 
 	delete plasma;
