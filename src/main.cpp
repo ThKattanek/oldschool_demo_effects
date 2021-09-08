@@ -1,5 +1,8 @@
 #include <iostream>
+#include <cstdio>
+
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 
 #include "./effect_plasma.h"
 
@@ -25,9 +28,39 @@ int main()
 	uint64_t counter_max = pf_frequency / fps;
 	uint64_t counter1 = 0;
 
+	TTF_Font *font_01;
+
 	EffectPlasma *plasma = new EffectPlasma(output_xw, output_yw);
 
-	SDL_Init(SDL_INIT_VIDEO);
+	if(SDL_Init(SDL_INIT_VIDEO) != 0)
+	{
+		cout << "Error: SDL_Init." << endl;
+		cout << SDL_GetError();
+		return (-1);
+	}
+
+	if(TTF_Init() != 0)
+	{
+		cout << "Error: TTF_Init." << endl;
+		cout << TTF_GetError();
+		return (-1);
+	}
+
+
+	char font_filename[1024];
+	sprintf(font_filename, "%s/MuktiNarrowBold.ttf", DATA_PATH);
+	cout << font_filename << endl;
+
+	font_01 = TTF_OpenFont(font_filename, 16);
+	if(!font_01)
+	{
+		cout << "Error: TTF_OpenFont." << endl;
+		cout << TTF_GetError();
+
+		TTF_Quit();
+		SDL_Quit();
+		return (-1);
+	}
 
 	SDL_Window *window = SDL_CreateWindow("Oldschool Demo Effects",SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, window_xw, window_yw, SDL_WINDOW_OPENGL | /*SDL_WINDOW_FULLSCREEN_DESKTOP |*/ SDL_WINDOW_RESIZABLE);
 	if(window == nullptr)
@@ -94,6 +127,8 @@ int main()
 	delete plasma;
 
 	SDL_DestroyTexture(texture_01);
+	TTF_CloseFont(font_01);
+	TTF_Quit();
 	SDL_Quit();
 	return 0;
 }

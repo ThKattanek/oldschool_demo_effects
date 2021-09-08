@@ -9,35 +9,23 @@ SOURCES += \
         effect_plasma.cpp \
         main.cpp
 
-CONFIG += link_pkgconfig
-PKGCONFIG += sdl2
-
-# Installation
-
-message(Installpath: $$PREFIX)
-DEFINES += DATA_PATH=\\\"$$PREFIX\\\"
-
-win32 {
-    target.path = $$PREFIX
-} else {
-    target.path = $$PREFIX/bin
-}
-
-INSTALLS += target
-
 HEADERS += \
 	effect_plasma.h
 
+CONFIG += link_pkgconfig
+PKGCONFIG += sdl2 SDL2_ttf
+
 # Installation
 
 message(Installpath: $$PREFIX)
-DEFINES += DATA_PATH=\\\"$$PREFIX\\\"
 
 win32 {
+    DEFINES += DATA_PATH=\\\"$$PREFIX/data\\\"
     target.path = $$PREFIX
     license.path = $$PREFIX
     data.path = $$PREFIX/data
 } else {
+    DEFINES += DATA_PATH=\\\"$$PREFIX/share/$$TARGET/data\\\"
     target.path = $$PREFIX/bin
     license.path = $$PREFIX/share/$$TARGET
     data.path = $$PREFIX/share/$$TARGET/data
@@ -46,4 +34,4 @@ win32 {
 INSTALLS += target license data
 
 license.files += ../LICENSE
-data.files += ../data/test.txt
+data.files += ../data/MuktiNarrowBold.ttf
