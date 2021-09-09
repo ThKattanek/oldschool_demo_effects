@@ -4,5 +4,11 @@
 ### All implemented effects
 * Plasma
 
+### Using Libraries
+* sdl2
+* sdl2_ttf
+
+#### !Buildsystem is here qmake!
+
 ## Screenshots
 ![Screenshot](screenshots/plasma.png)
