@@ -3,3 +3,6 @@
 
 ### All implemented effects
 * Plasma
+
+## Screenshots
+![Screenshot](screenshots/plasma.png)
