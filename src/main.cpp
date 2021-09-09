@@ -53,7 +53,7 @@ int main()
 	sprintf(font_filename, "%s/MuktiNarrowBold.ttf", DATA_PATH);
 	cout << font_filename << endl;
 
-	font_01 = TTF_OpenFont(font_filename, 160);
+	font_01 = TTF_OpenFont(font_filename, 48);
 	if(!font_01)
 	{
 		cout << "Error: TTF_OpenFont." << endl;
@@ -115,11 +115,13 @@ int main()
 		SDL_UnlockTexture(texture_01);
 		SDL_RenderCopy(renderer_out, texture_01, 0, 0);
 
+		/// overlay text output
 		text_surface = TTF_RenderText_Blended(font_01, "Plasma", color);
+		SDL_Rect src_rec = {0,0,text_surface->w, text_surface->h};
+		SDL_Rect dst_rec = src_rec;
+		dst_rec.x = 20;
 		SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer_out, text_surface);
-
-		SDL_RenderCopy(renderer_out, texture, nullptr, nullptr);
-
+		SDL_RenderCopy(renderer_out, texture, &src_rec, &dst_rec);
 		SDL_DestroyTexture(texture);
 		SDL_FreeSurface(text_surface);
 
