@@ -20,7 +20,7 @@ PKGCONFIG += sdl2 SDL2_ttf
 message(Installpath: $$PREFIX)
 
 win32 {
-    DEFINES += DATA_PATH=\\\"$$PREFIX/data\\\"
+    DEFINES += DATA_PATH=\\\"data\\\"
     target.path = $$PREFIX
     license.path = $$PREFIX
     data.path = $$PREFIX/data
