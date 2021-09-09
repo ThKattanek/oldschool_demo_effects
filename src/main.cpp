@@ -29,8 +29,10 @@ int main()
 	uint64_t counter1 = 0;
 
 	TTF_Font *font_01;
+	SDL_Surface *text_surface;
 
 	EffectPlasma *plasma = new EffectPlasma(output_xw, output_yw);
+
 
 	if(SDL_Init(SDL_INIT_VIDEO) != 0)
 	{
@@ -51,7 +53,7 @@ int main()
 	sprintf(font_filename, "%s/MuktiNarrowBold.ttf", DATA_PATH);
 	cout << font_filename << endl;
 
-	font_01 = TTF_OpenFont(font_filename, 16);
+	font_01 = TTF_OpenFont(font_filename, 160);
 	if(!font_01)
 	{
 		cout << "Error: TTF_OpenFont." << endl;
@@ -61,6 +63,8 @@ int main()
 		SDL_Quit();
 		return (-1);
 	}
+
+	SDL_Color color = {255,255,255,0};
 
 	SDL_Window *window = SDL_CreateWindow("Oldschool Demo Effects",SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, window_xw, window_yw, SDL_WINDOW_OPENGL | /*SDL_WINDOW_FULLSCREEN_DESKTOP |*/ SDL_WINDOW_RESIZABLE);
 	if(window == nullptr)
@@ -108,10 +112,16 @@ int main()
 		pitch /= SDL_BYTESPERPIXEL(pixelformat);
 
 		plasma->RenderEffect(pixelbuffer, pitch, frame_time);
-
 		SDL_UnlockTexture(texture_01);
-
 		SDL_RenderCopy(renderer_out, texture_01, 0, 0);
+
+		text_surface = TTF_RenderText_Blended(font_01, "Plasma", color);
+		SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer_out, text_surface);
+
+		SDL_RenderCopy(renderer_out, texture, nullptr, nullptr);
+
+		SDL_DestroyTexture(texture);
+		SDL_FreeSurface(text_surface);
 
 		// calculate frametime
 		frame_time = (float)counter1 / pf_frequency;
