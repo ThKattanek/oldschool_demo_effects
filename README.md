@@ -1,2 +1,2 @@
 # Oldschool Demo Effect
-## This is a comilation of old demo effects with sdl2
+## This is a compilation of old demo effects with sdl2
