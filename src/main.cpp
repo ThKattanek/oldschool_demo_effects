@@ -152,7 +152,8 @@ int main()
 
 		SDL_Rect src_rec = {0,0,text_surface->w, text_surface->h};
 		SDL_Rect dst_rec = src_rec;
-		dst_rec.x = 20;
+        dst_rec.y = -10;
+        dst_rec.x = 10;
 		SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer_out, text_surface);
 		SDL_RenderCopy(renderer_out, texture, &src_rec, &dst_rec);
 		SDL_DestroyTexture(texture);

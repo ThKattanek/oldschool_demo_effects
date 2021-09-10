@@ -15,6 +15,13 @@ private:
     void InitEffekt();
 
     int xw,yw;
+
+    int radius;
+    int dradius;
+    int sradius;
+    int number_of_blobs;
+
+    uint32_t colors[256];
 };
 
 #endif // EFFECTBLOB_H
