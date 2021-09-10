@@ -12,8 +12,8 @@ using namespace std;
 
 int main()
 {
-	int window_xw = 1920;	// Output Window Size or Fullscreen Size
-	int window_yw = 1080;
+    int window_xw = 1280;	// Output Window Size or Fullscreen Size
+    int window_yw = 720;
 
 	int output_xw = 640;	// Render Size for the Demo -> Scaled toWindow Size
 	int output_yw = 480;
