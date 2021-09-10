@@ -111,14 +111,14 @@ int main()
 				if(event.key.keysym.sym == SDLK_ESCAPE)
 					exit = true;
 
-                if(event.key.keysym.sym == SDLK_KP_PLUS || event.key.keysym.sym == SDLK_PLUS)
+                if(event.key.keysym.sym == SDLK_RIGHT)
                 {
                     current_view_effect++;
                     if(current_view_effect == MAX_EFFECTS)
                         current_view_effect = 0;
                 }
 
-                if(event.key.keysym.sym == SDLK_KP_MINUS || event.key.keysym.sym == SDLK_MINUS)
+                if(event.key.keysym.sym == SDLK_LEFT)
                 {
                     current_view_effect--;
                     if(current_view_effect < 0)
