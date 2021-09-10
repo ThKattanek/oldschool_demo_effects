@@ -6,10 +6,12 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
+        effect_blob.cpp \
         effect_plasma.cpp \
         main.cpp
 
 HEADERS += \
+	effect_blob.h \
 	effect_plasma.h
 
 CONFIG += link_pkgconfig

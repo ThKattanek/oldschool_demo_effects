@@ -5,10 +5,14 @@
 #include <SDL2/SDL_ttf.h>
 
 #include "./effect_plasma.h"
+#include "./effect_blob.h"
 
 using namespace std;
 
 #undef main
+
+enum {PLASMA, BLOB, MAX_EFFECTS};
+char *effect_names[MAX_EFFECTS] = {"PLASMA", "BLOB"};
 
 int main()
 {
@@ -31,8 +35,12 @@ int main()
 	TTF_Font *font_01;
 	SDL_Surface *text_surface;
 
-	EffectPlasma *plasma = new EffectPlasma(output_xw, output_yw);
+    // init effects
 
+	EffectPlasma *plasma = new EffectPlasma(output_xw, output_yw);
+    EffectBlob *blob = new EffectBlob(output_xw, output_yw);
+
+    int current_view_effect = BLOB;
 
 	if(SDL_Init(SDL_INIT_VIDEO) != 0)
 	{
@@ -102,6 +110,20 @@ int main()
 			{
 				if(event.key.keysym.sym == SDLK_ESCAPE)
 					exit = true;
+
+                if(event.key.keysym.sym == SDLK_KP_PLUS || event.key.keysym.sym == SDLK_PLUS)
+                {
+                    current_view_effect++;
+                    if(current_view_effect == MAX_EFFECTS)
+                        current_view_effect = 0;
+                }
+
+                if(event.key.keysym.sym == SDLK_KP_MINUS || event.key.keysym.sym == SDLK_MINUS)
+                {
+                    current_view_effect--;
+                    if(current_view_effect < 0)
+                        current_view_effect = MAX_EFFECTS-1;
+                }
 			}
 		}
 
@@ -111,12 +133,23 @@ int main()
 		SDL_LockTexture(texture_01, 0, (void**)&pixelbuffer, &pitch);
 		pitch /= SDL_BYTESPERPIXEL(pixelformat);
 
-		plasma->RenderEffect(pixelbuffer, pitch, frame_time);
+
+        switch(current_view_effect)
+        {
+        case PLASMA:
+            plasma->RenderEffect(pixelbuffer, pitch, frame_time);
+            break;
+        case BLOB:
+            blob->RenderEffect(pixelbuffer, pitch, frame_time);
+            break;
+        }
 		SDL_UnlockTexture(texture_01);
 		SDL_RenderCopy(renderer_out, texture_01, 0, 0);
 
 		/// overlay text output
-		text_surface = TTF_RenderText_Blended(font_01, "Plasma", color);
+
+        text_surface = TTF_RenderText_Blended(font_01, effect_names[current_view_effect], color);
+
 		SDL_Rect src_rec = {0,0,text_surface->w, text_surface->h};
 		SDL_Rect dst_rec = src_rec;
 		dst_rec.x = 20;
