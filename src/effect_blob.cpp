@@ -1,5 +1,6 @@
 #include "effect_blob.h"
 
+#include <cstdlib>
 #include <math.h>
 
 EffectBlob::EffectBlob(int xw, int yw)
