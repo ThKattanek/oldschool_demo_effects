@@ -80,7 +80,7 @@ int main()
 
 	SDL_Color color = {255,255,255,0};
 
-	SDL_Window *window = SDL_CreateWindow("Oldschool Demo Effects",SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, window_xw, window_yw, SDL_WINDOW_OPENGL | /*SDL_WINDOW_FULLSCREEN_DESKTOP |*/ SDL_WINDOW_RESIZABLE);
+	SDL_Window *window = SDL_CreateWindow("Oldschool Demo Effects - [change effect with cursor left and rigth]",SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, window_xw, window_yw, SDL_WINDOW_OPENGL | /*SDL_WINDOW_FULLSCREEN_DESKTOP |*/ SDL_WINDOW_RESIZABLE);
 	if(window == nullptr)
 	{
 		cout << "Error: SDL Window is not open." << endl;
