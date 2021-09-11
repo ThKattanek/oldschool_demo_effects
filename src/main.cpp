@@ -6,13 +6,14 @@
 
 #include "./effect_plasma.h"
 #include "./effect_blob.h"
+#include "./effect_fire.h"
 
 using namespace std;
 
 #undef main
 
-enum {PLASMA, BLOB, MAX_EFFECTS};
-char *effect_names[MAX_EFFECTS] = {"PLASMA", "BLOB"};
+enum {PLASMA, BLOB, FIRE, MAX_EFFECTS};
+char *effect_names[MAX_EFFECTS] = {"PLASMA", "BLOB", "FIRE"};
 
 int main()
 {
@@ -42,8 +43,9 @@ int main()
 
 	EffectPlasma *plasma = new EffectPlasma(output_xw, output_yw);
     EffectBlob *blob = new EffectBlob(output_xw, output_yw);
+	EffectFire *fire = new EffectFire(output_xw, output_yw);
 
-    int current_view_effect = BLOB;
+	int current_view_effect = FIRE;
 	bool changed_effect = false;
 
 	if(SDL_Init(SDL_INIT_VIDEO) != 0)
@@ -150,6 +152,11 @@ int main()
 				blob->ResetEffect();
             blob->RenderEffect(pixelbuffer, pitch, frame_time);
             break;
+		case FIRE:
+			if(changed_effect)
+				fire->ResetEffect(pixelbuffer, pitch);
+			fire->RenderEffect(pixelbuffer, pitch, frame_time);
+			break;
         }
 
 		changed_effect = false;
@@ -181,6 +188,7 @@ int main()
 		SDL_Delay(20);
 	}
 
+	delete fire;
 	delete blob;
 	delete plasma;
 

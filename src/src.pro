@@ -7,11 +7,13 @@ CONFIG -= qt
 
 SOURCES += \
         effect_blob.cpp \
+        effect_fire.cpp \
         effect_plasma.cpp \
         main.cpp
 
 HEADERS += \
 	effect_blob.h \
+	effect_fire.h \
 	effect_plasma.h
 
 CONFIG += link_pkgconfig

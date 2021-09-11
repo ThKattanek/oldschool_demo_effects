@@ -15,3 +15,4 @@ original sdl version -> http://demo-effects.sourceforge.net
 ## Screenshots
 ![Screenshot Plasma](screenshots/plasma.png)
 ![Screenshot Blob](screenshots/blob.png)
+![Screenshot Fire](screenshots/fire.png)
