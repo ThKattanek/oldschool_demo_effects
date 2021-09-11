@@ -5,6 +5,8 @@ original sdl version -> http://demo-effects.sourceforge.net
 
 ### All implemented effects
 * Plasma
+* Blob
+* Fire
 
 ### Using Libraries
 * sdl2
