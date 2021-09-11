@@ -41,6 +41,7 @@ int main()
     EffectBlob *blob = new EffectBlob(output_xw, output_yw);
 
     int current_view_effect = BLOB;
+	bool changed_effect = false;
 
 	if(SDL_Init(SDL_INIT_VIDEO) != 0)
 	{
@@ -116,6 +117,7 @@ int main()
                     current_view_effect++;
                     if(current_view_effect == MAX_EFFECTS)
                         current_view_effect = 0;
+					changed_effect = true;
                 }
 
                 if(event.key.keysym.sym == SDLK_LEFT)
@@ -123,6 +125,7 @@ int main()
                     current_view_effect--;
                     if(current_view_effect < 0)
                         current_view_effect = MAX_EFFECTS-1;
+					changed_effect = true;
                 }
 			}
 		}
@@ -140,9 +143,14 @@ int main()
             plasma->RenderEffect(pixelbuffer, pitch, frame_time);
             break;
         case BLOB:
+			if(changed_effect)
+				blob->ResetEffect();
             blob->RenderEffect(pixelbuffer, pitch, frame_time);
             break;
         }
+
+		changed_effect = false;
+
 		SDL_UnlockTexture(texture_01);
 		SDL_RenderCopy(renderer_out, texture_01, 0, 0);
 
@@ -167,9 +175,10 @@ int main()
 
 		SDL_RenderPresent(renderer_out);
 
-		SDL_Delay(15);
+		SDL_Delay(20);
 	}
 
+	delete blob;
 	delete plasma;
 
 	SDL_DestroyTexture(texture_01);

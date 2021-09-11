@@ -1,7 +1,7 @@
 TARGET = oldschool_demo_effects
 
 TEMPLATE = app
-CONFIG += c++11 #console
+CONFIG += c++11
 CONFIG -= app_bundle
 CONFIG -= qt
 
