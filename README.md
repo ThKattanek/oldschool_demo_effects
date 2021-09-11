@@ -13,4 +13,5 @@ original sdl version -> http://demo-effects.sourceforge.net
 #### !Buildsystem is here qmake!
 
 ## Screenshots
-![Screenshot](screenshots/plasma.png)
+![Screenshot Plasma](screenshots/plasma.png)
+![Screenshot Blob](screenshots/blob.png)
