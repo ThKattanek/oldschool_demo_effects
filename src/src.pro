@@ -7,17 +7,19 @@ CONFIG -= qt
 
 SOURCES += \
         effect_blob.cpp \
+        effect_bob.cpp \
         effect_fire.cpp \
         effect_plasma.cpp \
         main.cpp
 
 HEADERS += \
 	effect_blob.h \
+	effect_bob.h \
 	effect_fire.h \
 	effect_plasma.h
 
 CONFIG += link_pkgconfig
-PKGCONFIG += sdl2 SDL2_ttf
+PKGCONFIG += sdl2 SDL2_ttf SDL2_image
 
 # Installation
 
@@ -39,3 +41,4 @@ INSTALLS += target license data
 
 license.files += ../LICENSE
 data.files += ../data/MuktiNarrowBold.ttf
+data.files += ../data/eye.png

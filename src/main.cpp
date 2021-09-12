@@ -3,17 +3,19 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_ttf.h>
+#include <SDL2/SDL_image.h>
 
 #include "./effect_plasma.h"
 #include "./effect_blob.h"
 #include "./effect_fire.h"
+#include "./effect_bob.h"
 
 using namespace std;
 
 #undef main
 
-enum {PLASMA, BLOB, FIRE, MAX_EFFECTS};
-char *effect_names[MAX_EFFECTS] = {"PLASMA", "BLOB", "FIRE"};
+enum {PLASMA, BLOB, FIRE, BOB, MAX_EFFECTS};
+char *effect_names[MAX_EFFECTS] = {"PLASMA", "BLOB", "FIRE", "BOB"};
 
 int main()
 {
@@ -39,29 +41,35 @@ int main()
 	TTF_Font *font_01;
 	SDL_Surface *text_surface;
 
-    // init effects
+	SDL_Texture *img1_texture;
 
-	EffectPlasma *plasma = new EffectPlasma(output_xw, output_yw);
-    EffectBlob *blob = new EffectBlob(output_xw, output_yw);
-	EffectFire *fire = new EffectFire(output_xw, output_yw);
-
-	int current_view_effect = FIRE;
+	int current_view_effect = BOB;
 	bool changed_effect = false;
 
 	if(SDL_Init(SDL_INIT_VIDEO) != 0)
 	{
 		cout << "Error: SDL_Init." << endl;
-		cout << SDL_GetError();
+		cout << SDL_GetError() << endl;
 		return (-1);
 	}
 
 	if(TTF_Init() != 0)
 	{
 		cout << "Error: TTF_Init." << endl;
-		cout << TTF_GetError();
+		cout << TTF_GetError() << endl;
+		SDL_Quit();
 		return (-1);
 	}
 
+	int img_flags = IMG_INIT_PNG;
+	if(IMG_Init(img_flags) != img_flags)
+	{
+		cout << "Error: IMG_Init." << endl;
+		cout << IMG_GetError() << endl;
+		TTF_Quit();
+		SDL_Quit();
+		return (-1);
+	}
 
 	char font_filename[1024];
 	sprintf(font_filename, "%s/MuktiNarrowBold.ttf", DATA_PATH);
@@ -71,8 +79,9 @@ int main()
 	if(!font_01)
 	{
 		cout << "Error: TTF_OpenFont." << endl;
-		cout << TTF_GetError();
+		cout << TTF_GetError() << endl;
 
+		IMG_Quit();
 		TTF_Quit();
 		SDL_Quit();
 		return (-1);
@@ -85,18 +94,51 @@ int main()
 	{
 		cout << "Error: SDL Window is not open." << endl;
 		cout << SDL_GetError();
+		TTF_CloseFont(font_01);
+		IMG_Quit();
+		TTF_Quit();
+		SDL_Quit();
 		return (-1);
 	}
 
-	SDL_Renderer *renderer_out = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED /*| SDL_RENDERER_PRESENTVSYNC*/);
+	SDL_Renderer *renderer_out = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE /*| SDL_RENDERER_PRESENTVSYNC*/);
 	if(renderer_out == nullptr)
 	{
 		cout << "Error: SDL_Renerer ist not initialize." << endl;
 		cout << SDL_GetError();
+		TTF_CloseFont(font_01);
+		IMG_Quit();
+		TTF_Quit();
+		SDL_Quit();
 		return (-1);
 	}
 
 	SDL_Texture *texture_01 = SDL_CreateTexture(renderer_out, pixelformat, SDL_TEXTUREACCESS_STREAMING, output_xw, output_yw);
+
+	char img_filename[1024];
+	sprintf(img_filename, "%s/eye.png", DATA_PATH);
+	cout << img_filename << endl;
+
+	img1_texture = IMG_LoadTexture(renderer_out, img_filename);
+	if(img1_texture == nullptr)
+	{
+		cout << "Error: Image not loadet." << endl;
+		cout << SDL_GetError();
+		TTF_CloseFont(font_01);
+		IMG_Quit();
+		TTF_Quit();
+		SDL_Quit();
+		return (-1);
+	}
+
+
+	// init effects
+
+	EffectPlasma *plasma = new EffectPlasma(output_xw, output_yw);
+	EffectBlob *blob = new EffectBlob(output_xw, output_yw);
+	EffectFire *fire = new EffectFire(output_xw, output_yw);
+	EffectBob *bob = new EffectBob(renderer_out, img1_texture, output_xw, output_yw);
+
 
 	bool exit = false;
 
@@ -138,31 +180,39 @@ int main()
 		uint32_t *pixelbuffer;
 		int pitch;
 
-		SDL_LockTexture(texture_01, 0, (void**)&pixelbuffer, &pitch);
-		pitch /= SDL_BYTESPERPIXEL(pixelformat);
-
-
         switch(current_view_effect)
         {
-        case PLASMA:
+		case PLASMA:
+			SDL_LockTexture(texture_01, 0, (void**)&pixelbuffer, &pitch);
+			pitch /= SDL_BYTESPERPIXEL(pixelformat);
             plasma->RenderEffect(pixelbuffer, pitch, frame_time);
+			SDL_UnlockTexture(texture_01);
+			SDL_RenderCopy(renderer_out, texture_01, 0, 0);
             break;
         case BLOB:
 			if(changed_effect)
 				blob->ResetEffect();
+			SDL_LockTexture(texture_01, 0, (void**)&pixelbuffer, &pitch);
+			pitch /= SDL_BYTESPERPIXEL(pixelformat);
             blob->RenderEffect(pixelbuffer, pitch, frame_time);
+			SDL_UnlockTexture(texture_01);
+			SDL_RenderCopy(renderer_out, texture_01, 0, 0);
             break;
 		case FIRE:
+			SDL_LockTexture(texture_01, 0, (void**)&pixelbuffer, &pitch);
+			pitch /= SDL_BYTESPERPIXEL(pixelformat);
 			if(changed_effect)
 				fire->ResetEffect(pixelbuffer, pitch);
 			fire->RenderEffect(pixelbuffer, pitch, frame_time);
+			SDL_UnlockTexture(texture_01);
+			SDL_RenderCopy(renderer_out, texture_01, 0, 0);
+			break;
+		case BOB:
+			bob->RenderEffect();
 			break;
         }
 
 		changed_effect = false;
-
-		SDL_UnlockTexture(texture_01);
-		SDL_RenderCopy(renderer_out, texture_01, 0, 0);
 
 		/// overlay text output
 
@@ -188,10 +238,12 @@ int main()
 		SDL_Delay(20);
 	}
 
+	delete bob;
 	delete fire;
 	delete blob;
 	delete plasma;
 
+	SDL_DestroyTexture(img1_texture);
 	SDL_DestroyTexture(texture_01);
 	TTF_CloseFont(font_01);
 	TTF_Quit();

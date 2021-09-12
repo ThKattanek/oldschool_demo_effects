@@ -7,10 +7,12 @@ original sdl version -> http://demo-effects.sourceforge.net
 * Plasma
 * Blob
 * Fire
+* Bob
 
 ### Using Libraries
 * sdl2
 * sdl2_ttf
+* sdl2_image
 
 #### !Buildsystem is here qmake!
 
