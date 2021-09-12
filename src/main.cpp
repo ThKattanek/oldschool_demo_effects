@@ -67,7 +67,7 @@ int main()
 	sprintf(font_filename, "%s/MuktiNarrowBold.ttf", DATA_PATH);
 	cout << font_filename << endl;
 
-	font_01 = TTF_OpenFont(font_filename, 48);
+	font_01 = TTF_OpenFont(font_filename, 36);
 	if(!font_01)
 	{
 		cout << "Error: TTF_OpenFont." << endl;
@@ -170,7 +170,7 @@ int main()
 
 		SDL_Rect src_rec = {0,0,text_surface->w, text_surface->h};
 		SDL_Rect dst_rec = src_rec;
-        dst_rec.y = -10;
+		dst_rec.y = -5;
         dst_rec.x = 10;
 		SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer_out, text_surface);
 		SDL_RenderCopy(renderer_out, texture, &src_rec, &dst_rec);
