@@ -31,7 +31,7 @@ private:
 	uint32_t i, j, l, m;
 
 	SDL_Rect *rects;
-	SDL_Rect *oldrects;
+	//SDL_Rect *oldrects;
 };
 
 #endif // EFFECTBOB_H

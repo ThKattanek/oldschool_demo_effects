@@ -25,32 +25,23 @@ void EffectBob::RenderEffect()
 	m = j;
 
 	// clear and compute bob positions
-
-	SDL_SetRenderDrawBlendMode(renderer,SDL_BLENDMODE_NONE);
+	SDL_RenderClear(renderer);
 	for (int k = 0; k < number_of_bobs; ++k)
 	{
-		oldrects[k].x = rects[k].x;
 		rects[k].x = xpath[l & 511];
-		oldrects[k].y = rects[k].y;
 		rects[k].y = ypath[m & 511];
-
-		SDL_RenderFillRect(renderer, oldrects + k);
 
 		l += 20;
 		m += 20;
 	}
 
 	// blit bobs
-
-	SDL_SetRenderDrawBlendMode(renderer,SDL_BLENDMODE_BLEND);
-		SDL_SetTextureBlendMode(image, SDL_BLENDMODE_BLEND);
 	for (int k = 0; k < number_of_bobs; ++k)
 	{
 		SDL_RenderCopy(renderer, image, 0, rects + k);
 	}
 
 	// update positions in x and y pos table
-
 	i += 2;
 	j += 3;
 	i &= 511;
@@ -72,7 +63,6 @@ void EffectBob::InitEffect()
 
 	number_of_bobs = 14;
 	rects = new SDL_Rect [number_of_bobs];
-	oldrects = new SDL_Rect [number_of_bobs];
 
 	i = 0;
 	j = 40;
@@ -82,8 +72,8 @@ void EffectBob::InitEffect()
 
 	for(int k = 0; k < number_of_bobs; ++k)
 	{
-		rects[k].w = oldrects[k].w = image_xw;
-		rects[k].h = oldrects[k].h = image_yw;
+		rects[k].w = image_xw;
+		rects[k].h = image_yw;
 		rects[k].x = xpath[l & 511];
 		rects[k].y = ypath[m & 511];
 		l += 20;
@@ -94,5 +84,4 @@ void EffectBob::InitEffect()
 void EffectBob::ReleaseEffect()
 {
 	delete [] rects;
-	delete [] oldrects;
 }
