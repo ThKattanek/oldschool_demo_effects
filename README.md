@@ -25,7 +25,7 @@ git checkout 0.2.0
 mkdir build
 cd build
 qmake .. PREFIX="/usr/local"
-make -j8
+make 
 sudo make install
 ```
 
