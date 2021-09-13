@@ -8,6 +8,7 @@ CONFIG -= qt
 SOURCES += \
         effect_blob.cpp \
         effect_bob.cpp \
+        effect_copperbars.cpp \
         effect_fire.cpp \
         effect_plasma.cpp \
         main.cpp
@@ -15,6 +16,7 @@ SOURCES += \
 HEADERS += \
 	effect_blob.h \
 	effect_bob.h \
+	effect_copperbars.h \
 	effect_fire.h \
 	effect_plasma.h
 

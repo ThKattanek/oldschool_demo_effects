@@ -9,13 +9,14 @@
 #include "./effect_blob.h"
 #include "./effect_fire.h"
 #include "./effect_bob.h"
+#include "./effect_copperbars.h"
 
 using namespace std;
 
 #undef main
 
-enum {PLASMA, BLOB, FIRE, BOB, MAX_EFFECTS};
-char *effect_names[MAX_EFFECTS] = {"PLASMA", "BLOB", "FIRE", "BOB"};
+enum {PLASMA, BLOB, FIRE, BOB, COPPERBARS, MAX_EFFECTS};
+char *effect_names[MAX_EFFECTS] = {"PLASMA", "BLOB", "FIRE", "BOB", "COPPER BARS"};
 
 int main()
 {
@@ -43,7 +44,7 @@ int main()
 
 	SDL_Texture *img1_texture;
 
-	int current_view_effect = BOB;
+    int current_view_effect = COPPERBARS;
 	bool changed_effect = false;
 
 	if(SDL_Init(SDL_INIT_VIDEO) != 0)
@@ -138,10 +139,9 @@ int main()
 	EffectBlob *blob = new EffectBlob(output_xw, output_yw);
 	EffectFire *fire = new EffectFire(output_xw, output_yw);
 	EffectBob *bob = new EffectBob(renderer_out, img1_texture, output_xw, output_yw);
-
+    EffectCopperBars *copper = new EffectCopperBars(output_xw, output_yw);
 
 	bool exit = false;
-
 
 	// Main Loop
 	while (!exit)
@@ -210,6 +210,13 @@ int main()
 		case BOB:
 			bob->RenderEffect();
 			break;
+        case COPPERBARS:
+            SDL_LockTexture(texture_01, 0, (void**)&pixelbuffer, &pitch);
+            pitch /= SDL_BYTESPERPIXEL(pixelformat);
+            copper->RenderEffect(pixelbuffer, pitch, frame_time);
+            SDL_UnlockTexture(texture_01);
+            SDL_RenderCopy(renderer_out, texture_01, 0, 0);
+            break;
         }
 
 		changed_effect = false;
@@ -238,6 +245,7 @@ int main()
 		SDL_Delay(20);
 	}
 
+    delete copper;
 	delete bob;
 	delete fire;
 	delete blob;
