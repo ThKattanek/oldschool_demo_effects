@@ -17,7 +17,17 @@ original sdl version -> http://demo-effects.sourceforge.net
 * sdl2_ttf
 * sdl2_image
 
-#### !Buildsystem is here qmake!
+### Build and installation under linux
+```bash
+git clone https://github.com/ThKattanek/oldschool_demo_effects.git
+cd oldschool_demo_effects
+git checkout 0.2.0
+mkdir build
+cd build
+qmake .. PREFIX="/usr/local"
+make -j8
+sudo make install
+```
 
 ## Screenshots
 ![Screenshot Plasma](screenshots/plasma.png)
