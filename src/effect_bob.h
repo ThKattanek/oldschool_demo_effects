@@ -17,6 +17,7 @@ private:
 	void ReleaseEffect();
 
 	SDL_Renderer *renderer;
+    SDL_Texture *texTarget;
 	SDL_Texture *image;
 	int image_xw;
 	int image_yw;

@@ -1,5 +1,7 @@
 #include "effect_bob.h"
 
+#include <math.h>
+
 EffectBob::EffectBob(SDL_Renderer *renderer, SDL_Texture *image, int xw, int yw)
 {
 	this->renderer = renderer;
@@ -9,7 +11,7 @@ EffectBob::EffectBob(SDL_Renderer *renderer, SDL_Texture *image, int xw, int yw)
 
 	SDL_QueryTexture(image, NULL, NULL, &image_xw, &image_yw);
 
-
+    texTarget = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, xw, yw);
 
 	InitEffect();
 }
@@ -17,12 +19,16 @@ EffectBob::EffectBob(SDL_Renderer *renderer, SDL_Texture *image, int xw, int yw)
 EffectBob::~EffectBob()
 {
 	ReleaseEffect();
+
+    SDL_DestroyTexture(texTarget);
 }
 
 void EffectBob::RenderEffect()
 {
 	l = i;
 	m = j;
+
+    SDL_SetRenderTarget(renderer, texTarget);
 
 	// clear and compute bob positions
 	SDL_RenderClear(renderer);
@@ -46,6 +52,10 @@ void EffectBob::RenderEffect()
 	j += 3;
 	i &= 511;
 	j &= 511;
+
+    SDL_SetRenderTarget(renderer, NULL);
+
+    SDL_RenderCopy(renderer, texTarget, 0, 0);
 }
 
 void EffectBob::InitEffect()
