@@ -139,7 +139,7 @@ int main()
 	EffectBlob *blob = new EffectBlob(output_xw, output_yw);
 	EffectFire *fire = new EffectFire(output_xw, output_yw);
 	EffectBob *bob = new EffectBob(renderer_out, img1_texture, output_xw, output_yw);
-    EffectCopperBars *copper = new EffectCopperBars(output_xw, output_yw);
+	EffectCopperBars *copper = new EffectCopperBars(renderer_out, output_xw, output_yw);
 
 	bool exit = false;
 
@@ -211,11 +211,7 @@ int main()
 			bob->RenderEffect();
 			break;
         case COPPERBARS:
-            SDL_LockTexture(texture_01, 0, (void**)&pixelbuffer, &pitch);
-            pitch /= SDL_BYTESPERPIXEL(pixelformat);
-            copper->RenderEffect(pixelbuffer, pitch, frame_time);
-            SDL_UnlockTexture(texture_01);
-            SDL_RenderCopy(renderer_out, texture_01, 0, 0);
+			copper->RenderEffect();
             break;
         }
 

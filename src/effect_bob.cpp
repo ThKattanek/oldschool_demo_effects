@@ -31,7 +31,9 @@ void EffectBob::RenderEffect()
     SDL_SetRenderTarget(renderer, texTarget);
 
 	// clear and compute bob positions
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
 	SDL_RenderClear(renderer);
+
 	for (int k = 0; k < number_of_bobs; ++k)
 	{
 		rects[k].x = xpath[l & 511];

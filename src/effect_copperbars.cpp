@@ -2,13 +2,16 @@
 
 #include <math.h>
 
-EffectCopperBars::EffectCopperBars(int xw, int yw)
+EffectCopperBars::EffectCopperBars(SDL_Renderer *renderer, int xw, int yw)
 {
+	this->renderer = renderer;
     this->xw = xw;
     this->yw = yw;
 
     copper = nullptr;
     aSin = nullptr;
+
+	texTarget = SDL_CreateTexture(renderer, SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET, xw, yw);
 
     InitEffect();
 }
@@ -16,11 +19,104 @@ EffectCopperBars::EffectCopperBars(int xw, int yw)
 EffectCopperBars::~EffectCopperBars()
 {
     ReleaseEffect();
+
+	SDL_DestroyTexture(texTarget);
 }
 
-void EffectCopperBars::RenderEffect(uint32_t *pixelbuffer, int pitch, float frametime)
+void EffectCopperBars::RenderEffect()
 {
+	SDL_SetRenderTarget(renderer, texTarget);
+	SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
+	SDL_RenderClear(renderer);
 
+	// draw copperbars back to front
+
+	drect.y = aSin[blue7];
+	blue8 = drect.y;
+	blue7 += 2;
+	blue7 %= 360;
+
+	DrawCopper(&drect, 31);
+
+	drect.y = aSin[blue5];
+	blue6 = drect.y;
+	blue5 += 2;
+	blue5 %= 360;
+
+	DrawCopper(&drect, 31);
+
+	drect.y = aSin[blue3];
+	blue4 = drect.y;
+	blue3 += 2;
+	blue3 %= 360;
+
+	DrawCopper(&drect, 31);
+
+	drect.y = aSin[blue];
+	blue2 = drect.y;
+	blue += 2;
+	blue %= 360;
+
+	DrawCopper(&drect, 31);
+
+	drect.y = aSin[white7];
+	white8 = drect.y;
+	white7 += 2;
+	white7 %= 360;
+
+	DrawCopper(&drect, 16);
+
+	drect.y = aSin[white5];
+	white6 = drect.y;
+	white5 += 2;
+	white5 %= 360;
+
+	DrawCopper(&drect, 16);
+
+	drect.y = aSin[white3];
+	white4 = drect.y;
+	white3 += 2;
+	white3 %= 360;
+
+	DrawCopper(&drect, 16);
+
+	drect.y = aSin[white];
+	white2 = drect.y;
+	white += 2;
+	white %= 360;
+
+	DrawCopper(&drect, 16);
+
+	drect.y = aSin[red7];
+	red8 = drect.y;
+	red7 += 2;
+	red7 %= 360;
+
+	DrawCopper(&drect, 1);
+
+	drect.y = aSin[red5];
+	red6 = drect.y;
+	red5 += 2;
+	red5 %= 360;
+
+	DrawCopper(&drect, 1);
+
+	drect.y = aSin[red3];
+	red4 = drect.y;
+	red3 += 2;
+	red3 %= 360;
+
+	DrawCopper(&drect, 1);
+
+	drect.y = aSin[red];
+	red2 = drect.y;
+	red += 2;
+	red %= 360;
+
+	DrawCopper(&drect, 1);
+
+	SDL_SetRenderTarget(renderer, NULL);
+	SDL_RenderCopy(renderer, texTarget, 0, 0);
 }
 
 void EffectCopperBars::InitEffect()
@@ -88,10 +184,53 @@ void EffectCopperBars::InitEffect()
     copper[43] = 0x66 << 8;
     copper[44] = 0x44 << 8;
     copper[45] = 0x22 << 8;
+
+	red = 96;
+	red2 = 0;
+	red3 = 88;
+	red4 = 0;
+	red5 = 80;
+	red6 = 0;
+	red7 = 72;
+	red8 = 0;
+	white = 64;
+	white2 = 0;
+	white3 = 56;
+	white4 = 0;
+	white5 = 48;
+	white6 = 0;
+	white7 = 40;
+	white8 = 0;
+	blue = 32;
+	blue2 = 0;
+	blue3 = 24;
+	blue4 = 0;
+	blue5 = 16;
+	blue6 = 0;
+	blue7 = 8;
+	blue8 = 0;
+
+	drect.x = 0;
+	drect.w = xw;
+	drect.h = 1;
+
+	crect.x = 0;
+	crect.w = xw;
+	crect.h = 15;
 }
 
 void EffectCopperBars::ReleaseEffect()
 {
     if(copper != nullptr) delete [] copper;
-    if(aSin != nullptr) delete [] aSin;
+	if(aSin != nullptr) delete [] aSin;
+}
+
+void EffectCopperBars::DrawCopper(SDL_Rect *r, int add)
+{
+	for (int i = 0; i < 15; i++)
+	{
+		SDL_SetRenderDrawColor(renderer, (copper[i + add] >> 24) & 0xff, (copper[i + add] >> 16) & 0xff, (copper[i + add] >> 8) & 0xff, 0x00);
+		SDL_RenderFillRect(renderer, r);
+		r->y++;
+	}
 }

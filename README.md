@@ -8,6 +8,7 @@ original sdl version -> http://demo-effects.sourceforge.net
 * Blob
 * Fire
 * Bob
+* Copperbars
 
 ### Using Libraries
 * sdl2
@@ -20,4 +21,5 @@ original sdl version -> http://demo-effects.sourceforge.net
 ![Screenshot Plasma](screenshots/plasma.png)
 ![Screenshot Blob](screenshots/blob.png)
 ![Screenshot Fire](screenshots/fire.png)
-![Screenshot Fire](screenshots/bob.png)
+![Screenshot Bob](screenshots/bob.png)
+![Screenshot Copperbars](screenshots/copperbars.png)
