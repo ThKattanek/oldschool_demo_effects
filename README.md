@@ -1,6 +1,8 @@
 # Oldschool Demo Effects
 ## This is a compilation of old demo effects with sdl2 in a single application.
 
+### [Latest windows version here](https://github.com/ThKattanek/oldschool_demo_effects/releases/latest)
+
 original sdl version -> http://demo-effects.sourceforge.net
 
 ### All implemented effects
