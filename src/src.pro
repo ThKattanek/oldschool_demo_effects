@@ -6,6 +6,7 @@ CONFIG -= app_bundle
 CONFIG -= qt
 
 SOURCES += \
+        effect_barscroller.cpp \
         effect_blob.cpp \
         effect_bob.cpp \
         effect_copperbars.cpp \
@@ -14,6 +15,7 @@ SOURCES += \
         main.cpp
 
 HEADERS += \
+	effect_barscroller.h \
 	effect_blob.h \
 	effect_bob.h \
 	effect_copperbars.h \
@@ -44,3 +46,4 @@ INSTALLS += target license data
 license.files += ../LICENSE
 data.files += ../data/MuktiNarrowBold.ttf
 data.files += ../data/eye.png
+data.files += ../data/font.pcx

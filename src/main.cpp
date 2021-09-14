@@ -10,13 +10,14 @@
 #include "./effect_fire.h"
 #include "./effect_bob.h"
 #include "./effect_copperbars.h"
+#include "./effect_barscroller.h"
 
 using namespace std;
 
 #undef main
 
-enum {PLASMA, BLOB, FIRE, BOB, COPPERBARS, MAX_EFFECTS};
-char *effect_names[MAX_EFFECTS] = {"PLASMA", "BLOB", "FIRE", "BOB", "COPPER BARS"};
+enum {PLASMA, BLOB, FIRE, BOB, COPPERBARS, BARSCROLLER, MAX_EFFECTS};
+char *effect_names[MAX_EFFECTS] = {"PLASMA", "BLOB", "FIRE", "BOB", "COPPER BARS", "BARSCROLLER"};
 
 int main()
 {
@@ -43,8 +44,9 @@ int main()
 	SDL_Surface *text_surface;
 
 	SDL_Texture *img1_texture;
+	SDL_Texture *font_texture;
 
-    int current_view_effect = COPPERBARS;
+	int current_view_effect = BARSCROLLER;
 	bool changed_effect = false;
 
 	if(SDL_Init(SDL_INIT_VIDEO) != 0)
@@ -116,12 +118,27 @@ int main()
 
 	SDL_Texture *texture_01 = SDL_CreateTexture(renderer_out, pixelformat, SDL_TEXTUREACCESS_STREAMING, output_xw, output_yw);
 
-	char img_filename[1024];
-	sprintf(img_filename, "%s/eye.png", DATA_PATH);
-	cout << img_filename << endl;
+	char filename[1024];
+	sprintf(filename, "%s/eye.png", DATA_PATH);
+	cout << filename << endl;
 
-	img1_texture = IMG_LoadTexture(renderer_out, img_filename);
+	img1_texture = IMG_LoadTexture(renderer_out, filename);
 	if(img1_texture == nullptr)
+	{
+		cout << "Error: Image not loadet." << endl;
+		cout << SDL_GetError();
+		TTF_CloseFont(font_01);
+		IMG_Quit();
+		TTF_Quit();
+		SDL_Quit();
+		return (-1);
+	}
+
+	sprintf(filename, "%s/font.pcx", DATA_PATH);
+	cout << filename << endl;
+
+	font_texture = IMG_LoadTexture(renderer_out, filename);
+	if(font_texture == nullptr)
 	{
 		cout << "Error: Image not loadet." << endl;
 		cout << SDL_GetError();
@@ -140,6 +157,7 @@ int main()
 	EffectFire *fire = new EffectFire(output_xw, output_yw);
 	EffectBob *bob = new EffectBob(renderer_out, img1_texture, output_xw, output_yw);
 	EffectCopperBars *copper = new EffectCopperBars(renderer_out, output_xw, output_yw);
+	EffectBarscroller *barscroller = new EffectBarscroller(renderer_out, font_texture, output_xw, output_yw);
 
 	bool exit = false;
 
@@ -213,6 +231,9 @@ int main()
         case COPPERBARS:
 			copper->RenderEffect();
             break;
+		case BARSCROLLER:
+			barscroller->RenderEffect();
+			break;
         }
 
 		changed_effect = false;
@@ -241,12 +262,14 @@ int main()
 		SDL_Delay(20);
 	}
 
+	delete barscroller;
     delete copper;
 	delete bob;
 	delete fire;
 	delete blob;
 	delete plasma;
 
+	SDL_DestroyTexture(font_texture);
 	SDL_DestroyTexture(img1_texture);
 	SDL_DestroyTexture(texture_01);
 	TTF_CloseFont(font_01);
