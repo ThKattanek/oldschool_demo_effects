@@ -27,6 +27,8 @@ PKGCONFIG += sdl2 SDL2_ttf SDL2_image
 
 # Installation
 
+!win32:isEmpty(PREFIX):PREFIX=/usr/local
+
 message(Installpath: $$PREFIX)
 
 win32 {
