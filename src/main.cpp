@@ -14,6 +14,9 @@
 
 using namespace std;
 
+#define CHARACTER_WIDTH 16
+#define CHARACTER_HEIGHT 32
+
 #undef main
 
 enum {PLASMA, BLOB, FIRE, BOB, COPPERBARS, BARSCROLLER, MAX_EFFECTS};
@@ -21,11 +24,11 @@ char *effect_names[MAX_EFFECTS] = {"PLASMA", "BLOB", "FIRE", "BOB", "COPPER BARS
 
 int main()
 {
-	//int window_xw = 1280;	// Output Window Size or Fullscreen Size
-	//int window_yw = 960;
+	int window_xw = 1280;	// Output Window Size or Fullscreen Size
+	int window_yw = 960;
 
-	int window_xw = 640;	// Output Window Size or Fullscreen Size
-	int window_yw = 480;
+	//int window_xw = 640;	// Output Window Size or Fullscreen Size
+	//int window_yw = 480;
 
 	int output_xw = 640;	// Render Size for the Demo -> Scaled toWindow Size
 	int output_yw = 480;
@@ -96,7 +99,7 @@ int main()
 	if(window == nullptr)
 	{
 		cout << "Error: SDL Window is not open." << endl;
-		cout << SDL_GetError();
+		cout << SDL_GetError() << endl;
 		TTF_CloseFont(font_01);
 		IMG_Quit();
 		TTF_Quit();
@@ -104,11 +107,11 @@ int main()
 		return (-1);
 	}
 
-	SDL_Renderer *renderer_out = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE /*| SDL_RENDERER_PRESENTVSYNC*/);
+	SDL_Renderer *renderer_out = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_TARGETTEXTURE | SDL_RENDERER_PRESENTVSYNC);
 	if(renderer_out == nullptr)
 	{
 		cout << "Error: SDL_Renerer ist not initialize." << endl;
-		cout << SDL_GetError();
+		cout << SDL_GetError() << endl;
 		TTF_CloseFont(font_01);
 		IMG_Quit();
 		TTF_Quit();
@@ -126,7 +129,7 @@ int main()
 	if(img1_texture == nullptr)
 	{
 		cout << "Error: Image not loadet." << endl;
-		cout << SDL_GetError();
+		cout << SDL_GetError() << endl;
 		TTF_CloseFont(font_01);
 		IMG_Quit();
 		TTF_Quit();
@@ -141,7 +144,7 @@ int main()
 	if(font_texture == nullptr)
 	{
 		cout << "Error: Image not loadet." << endl;
-		cout << SDL_GetError();
+		cout << SDL_GetError() << endl;
 		TTF_CloseFont(font_01);
 		IMG_Quit();
 		TTF_Quit();
@@ -157,7 +160,7 @@ int main()
 	EffectFire *fire = new EffectFire(output_xw, output_yw);
 	EffectBob *bob = new EffectBob(renderer_out, img1_texture, output_xw, output_yw);
 	EffectCopperBars *copper = new EffectCopperBars(renderer_out, output_xw, output_yw);
-	EffectBarscroller *barscroller = new EffectBarscroller(renderer_out, font_texture, output_xw, output_yw);
+	EffectBarscroller *barscroller = new EffectBarscroller(renderer_out, output_xw, output_yw, font_texture, CHARACTER_WIDTH, CHARACTER_HEIGHT);
 
 	bool exit = false;
 
