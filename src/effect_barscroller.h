@@ -15,8 +15,12 @@ public:
 private:
 	void InitEffect();
 	void ReleaseEffect();
+    int16_t CalculateFontPosition(char scroll_char);
+    void PrintCharacter();
 
 	SDL_Renderer *renderer;
+    SDL_Texture *font_tex;
+
 	int xw, yw, char_xw, char_yw;
 
 	int16_t aSin[360];

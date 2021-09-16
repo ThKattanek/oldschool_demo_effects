@@ -24,11 +24,11 @@ char *effect_names[MAX_EFFECTS] = {"PLASMA", "BLOB", "FIRE", "BOB", "COPPER BARS
 
 int main()
 {
-	int window_xw = 1280;	// Output Window Size or Fullscreen Size
-	int window_yw = 960;
+    //int window_xw = 1280;	// Output Window Size or Fullscreen Size
+    //int window_yw = 960;
 
-	//int window_xw = 640;	// Output Window Size or Fullscreen Size
-	//int window_yw = 480;
+    int window_xw = 640;	// Output Window Size or Fullscreen Size
+    int window_yw = 480;
 
 	int output_xw = 640;	// Render Size for the Demo -> Scaled toWindow Size
 	int output_yw = 480;
