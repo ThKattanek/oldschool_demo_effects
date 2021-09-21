@@ -41,6 +41,37 @@ void EffectBarscroller::InitEffect()
 	sprintf(characters, "%s"," !#$%&'()*+,-./0123456789:;<=>?@ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz{|}~");
 	text_pointer = text;
 	stopscroller = 0;
+
+	float rad;
+	short centery = yw >> 1;
+
+	// create sin lookup table
+	for (int i = 0; i < 360; i++)
+	  {
+		rad =  (float)i * 0.0174532;
+		aSin[i] = centery + (short)((sin(rad) * 75.0));
+	  }
+
+	for (int i = 0; i < xw + char_xw; i++)
+	  {
+		rad =  (float)i * 0.0174532 * (360.0 / (xw + char_xw)) ; /* spread 360 degrees over SCREEN_WIDTH  + CHARACTER_WIDTH values */
+		aSin2[i] = (short)((sin(rad) * 100.0));
+	  }
+
+	// create palette
+	colors[1].g = 64;
+	colors[2].g = 128;
+	colors[3].g = 200;
+	colors[4].g = 255;
+
+	displacement = 0;
+	j = 0;
+	srect2 = {0, 0, 1, char_yw};
+	drect = {0, 0, 1, char_yw};
+	srect = {2, 0, xw + (char_xw * 2), char_yw};
+	frect = {0, xw / 2 - 75, xw, 182};
+	rs = {0, 0, 1, char_yw};
+	rs2 = {0, 0, 1, char_yw};
 }
 
 void EffectBarscroller::ReleaseEffect()

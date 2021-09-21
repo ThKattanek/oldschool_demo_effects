@@ -31,6 +31,17 @@ private:
 	char* text_pointer = text;
 	uint8_t stopscroller = 0;
 	uint32_t time;
+
+	SDL_Color colors[5];
+
+	uint32_t i, j, displacement;
+	SDL_Rect srect2;
+	SDL_Rect drect;
+	SDL_Rect srect;
+	SDL_Rect frect;
+	SDL_Rect rs;
+	SDL_Rect rs2;
+	Uint8* image;
 };
 
 #endif // EFFECTBARSCROLLER_H
