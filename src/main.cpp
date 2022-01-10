@@ -10,6 +10,7 @@
 #include "./effect_fire.h"
 #include "./effect_bob.h"
 #include "./effect_copperbars.h"
+#include "./effect_explosion.h"
 #include "./effect_barscroller.h"
 
 using namespace std;
@@ -19,8 +20,8 @@ using namespace std;
 
 #undef main
 
-enum {PLASMA, BLOB, FIRE, BOB, COPPERBARS, BARSCROLLER, MAX_EFFECTS};
-char *effect_names[MAX_EFFECTS] = {"PLASMA", "BLOB", "FIRE", "BOB", "COPPER BARS", "BARSCROLLER"};
+enum {PLASMA, BLOB, FIRE, BOB, COPPERBARS, EXPLOSION, BARSCROLLER, MAX_EFFECTS};
+char *effect_names[MAX_EFFECTS] = {"PLASMA", "BLOB", "FIRE", "BOB", "COPPER BARS", "EXPLOSION", "BARSCROLLER"};
 
 int main()
 {
@@ -49,7 +50,7 @@ int main()
 	SDL_Texture *img1_texture;
 	SDL_Texture *font_texture;
 
-	int current_view_effect = BARSCROLLER;
+    int current_view_effect = EXPLOSION;
 	bool changed_effect = false;
 
 	if(SDL_Init(SDL_INIT_VIDEO) != 0)
@@ -160,6 +161,7 @@ int main()
 	EffectFire *fire = new EffectFire(output_xw, output_yw);
 	EffectBob *bob = new EffectBob(renderer_out, img1_texture, output_xw, output_yw);
 	EffectCopperBars *copper = new EffectCopperBars(renderer_out, output_xw, output_yw);
+    EffectExplosion *explosion = new EffectExplosion(output_xw, output_yw);
 	EffectBarscroller *barscroller = new EffectBarscroller(renderer_out, output_xw, output_yw, font_texture, CHARACTER_WIDTH, CHARACTER_HEIGHT);
 
 	bool exit = false;
@@ -234,6 +236,9 @@ int main()
         case COPPERBARS:
 			copper->RenderEffect();
             break;
+        case EXPLOSION:
+            explosion->RenderEffect(pixelbuffer, pitch, frame_time);
+            break;
 		case BARSCROLLER:
 			barscroller->RenderEffect();
 			break;
@@ -266,6 +271,7 @@ int main()
 	}
 
 	delete barscroller;
+    delete explosion;
     delete copper;
 	delete bob;
 	delete fire;
