@@ -1,6 +1,7 @@
 #include "effect_barscroller.h"
 
 #include <iostream>
+#include <math.h>
 
 EffectBarscroller::EffectBarscroller(SDL_Renderer *renderer, int xw, int yw, SDL_Texture *font_tex, int char_xw, int char_yw)
 {
