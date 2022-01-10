@@ -153,7 +153,6 @@ int main()
 		return (-1);
 	}
 
-
 	// init effects
 
 	EffectPlasma *plasma = new EffectPlasma(output_xw, output_yw);
@@ -165,6 +164,10 @@ int main()
 	EffectBarscroller *barscroller = new EffectBarscroller(renderer_out, output_xw, output_yw, font_texture, CHARACTER_WIDTH, CHARACTER_HEIGHT);
 
 	bool exit = false;
+
+    SDL_Rect src_rec;
+    SDL_Rect dst_rec;
+    SDL_Texture *text_texture;
 
 	// Main Loop
 	while (!exit)
@@ -188,6 +191,12 @@ int main()
                     if(current_view_effect == MAX_EFFECTS)
                         current_view_effect = 0;
 					changed_effect = true;
+                }
+
+                if(event.key.keysym.sym == SDLK_SPACE)
+                {
+                    if(current_view_effect == EXPLOSION)
+                        explosion->StartNewExplosion();
                 }
 
                 if(event.key.keysym.sym == SDLK_LEFT)
@@ -237,7 +246,14 @@ int main()
 			copper->RenderEffect();
             break;
         case EXPLOSION:
+            SDL_LockTexture(texture_01, 0, (void**)&pixelbuffer, &pitch);
+            pitch /= SDL_BYTESPERPIXEL(pixelformat);
             explosion->RenderEffect(pixelbuffer, pitch, frame_time);
+            SDL_UnlockTexture(texture_01);
+
+
+
+            SDL_RenderCopy(renderer_out, texture_01, 0, 0);
             break;
 		case BARSCROLLER:
 			barscroller->RenderEffect();
@@ -250,14 +266,28 @@ int main()
 
         text_surface = TTF_RenderText_Blended(font_01, effect_names[current_view_effect], color);
 
-		SDL_Rect src_rec = {0,0,text_surface->w, text_surface->h};
-		SDL_Rect dst_rec = src_rec;
+        src_rec = {0,0,text_surface->w, text_surface->h};
+        dst_rec = src_rec;
 		dst_rec.y = -5;
         dst_rec.x = 10;
-		SDL_Texture *texture = SDL_CreateTextureFromSurface(renderer_out, text_surface);
-		SDL_RenderCopy(renderer_out, texture, &src_rec, &dst_rec);
-		SDL_DestroyTexture(texture);
+        text_texture = SDL_CreateTextureFromSurface(renderer_out, text_surface);
+        SDL_RenderCopy(renderer_out, text_texture, &src_rec, &dst_rec);
+        SDL_DestroyTexture(text_texture);
 		SDL_FreeSurface(text_surface);
+
+        if(current_view_effect == EXPLOSION)
+        {
+            text_surface = TTF_RenderText_Blended(font_01, "Press Space ...", color);
+
+            src_rec = {0,0,text_surface->w, text_surface->h};
+            dst_rec = src_rec;
+            dst_rec.y = output_yw - text_surface->h;
+            dst_rec.x = (output_xw - text_surface->w) / 2;
+            text_texture = SDL_CreateTextureFromSurface(renderer_out, text_surface);
+            SDL_RenderCopy(renderer_out, text_texture, &src_rec, &dst_rec);
+            SDL_DestroyTexture(text_texture);
+            SDL_FreeSurface(text_surface);
+        }
 
 		// calculate frametime
 		frame_time = (float)counter1 / pf_frequency;
