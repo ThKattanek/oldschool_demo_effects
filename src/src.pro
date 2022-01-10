@@ -13,6 +13,7 @@ SOURCES += \
         effect_explosion.cpp \
         effect_fire.cpp \
         effect_plasma.cpp \
+        effect_starfield.cpp \
         main.cpp
 
 HEADERS += \
@@ -22,7 +23,8 @@ HEADERS += \
 	effect_copperbars.h \
 	effect_explosion.h \
 	effect_fire.h \
-	effect_plasma.h
+	effect_plasma.h \
+	effect_starfield.h
 
 CONFIG += link_pkgconfig
 PKGCONFIG += sdl2 SDL2_ttf SDL2_image

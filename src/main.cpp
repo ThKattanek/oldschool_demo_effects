@@ -11,6 +11,7 @@
 #include "./effect_bob.h"
 #include "./effect_copperbars.h"
 #include "./effect_explosion.h"
+#include "./effect_starfield.h"
 #include "./effect_barscroller.h"
 
 using namespace std;
@@ -20,8 +21,8 @@ using namespace std;
 
 #undef main
 
-enum {PLASMA, BLOB, FIRE, BOB, COPPERBARS, EXPLOSION, BARSCROLLER, MAX_EFFECTS};
-char *effect_names[MAX_EFFECTS] = {"PLASMA", "BLOB", "FIRE", "BOB", "COPPER BARS", "EXPLOSION", "BARSCROLLER"};
+enum {PLASMA, BLOB, FIRE, BOB, COPPERBARS, EXPLOSION, STARFIELD, BARSCROLLER, MAX_EFFECTS};
+char *effect_names[MAX_EFFECTS] = {"PLASMA", "BLOB", "FIRE", "BOB", "COPPER BARS", "EXPLOSION", "STARFIELD", "BARSCROLLER"};
 
 int main()
 {
@@ -50,7 +51,7 @@ int main()
 	SDL_Texture *img1_texture;
 	SDL_Texture *font_texture;
 
-    int current_view_effect = EXPLOSION;
+    int current_view_effect = STARFIELD;
 	bool changed_effect = false;
 
 	if(SDL_Init(SDL_INIT_VIDEO) != 0)
@@ -161,6 +162,7 @@ int main()
 	EffectBob *bob = new EffectBob(renderer_out, img1_texture, output_xw, output_yw);
 	EffectCopperBars *copper = new EffectCopperBars(renderer_out, output_xw, output_yw);
     EffectExplosion *explosion = new EffectExplosion(output_xw, output_yw);
+    EffectStarfield *starfield = new EffectStarfield(output_xw, output_yw);
 	EffectBarscroller *barscroller = new EffectBarscroller(renderer_out, output_xw, output_yw, font_texture, CHARACTER_WIDTH, CHARACTER_HEIGHT);
 
 	bool exit = false;
@@ -250,9 +252,13 @@ int main()
             pitch /= SDL_BYTESPERPIXEL(pixelformat);
             explosion->RenderEffect(pixelbuffer, pitch, frame_time);
             SDL_UnlockTexture(texture_01);
-
-
-
+            SDL_RenderCopy(renderer_out, texture_01, 0, 0);
+            break;
+        case STARFIELD:
+            SDL_LockTexture(texture_01, 0, (void**)&pixelbuffer, &pitch);
+            pitch /= SDL_BYTESPERPIXEL(pixelformat);
+            starfield->RenderEffect(pixelbuffer, pitch, frame_time);
+            SDL_UnlockTexture(texture_01);
             SDL_RenderCopy(renderer_out, texture_01, 0, 0);
             break;
 		case BARSCROLLER:
@@ -301,6 +307,7 @@ int main()
 	}
 
 	delete barscroller;
+    delete starfield;
     delete explosion;
     delete copper;
 	delete bob;
