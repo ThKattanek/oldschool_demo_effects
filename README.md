@@ -11,6 +11,8 @@ original sdl version -> http://demo-effects.sourceforge.net
 * Fire
 * Bob
 * Copperbars
+* Explosion
+* Starield
 
 ### Using Libraries
 * sdl2
@@ -35,3 +37,6 @@ sudo make install
 ![Screenshot Fire](screenshots/fire.png)
 ![Screenshot Bob](screenshots/bob.png)
 ![Screenshot Copperbars](screenshots/copperbars.png)
+![Screenshot Explosion](screenshots/explosion.png)
+![Screenshot Starfield](screenshots/starfield.png)
+
