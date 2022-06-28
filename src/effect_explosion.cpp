@@ -49,7 +49,9 @@ void EffectExplosion::RenderEffect(uint32_t *pixelbuffer, int pitch, float frame
             fire[temp] = particles[i].colorindex;
             fire[temp - 1] = particles[i].colorindex;
             fire[temp + xw] = particles[i].colorindex;
-            fire[temp - xw] = particles[i].colorindex;
+			int t = temp - xw;
+			if (t > -1)
+				fire[temp - xw] = particles[i].colorindex;
             fire[temp + 1] = particles[i].colorindex;
         }
     }
